@@ -36,9 +36,9 @@ def image_height image_path
   image.height 
 end
 
-Dir.glob(File.join(INPUTDIR, "*.epub")).each do |file|
-  if !file.to_s.include?("Book_")
-    File.rename(file, "#{INPUTDIR}/Book_#{SecureRandom.urlsafe_base64(5)}" << ".epub")
+Dir.glob(File.join(INPUTDIR, "*.epub")).each do |filename|
+  if !filename.include?("Book_") && !(filename =~ /\d*\_epub\.epub/)
+    File.rename(filename, "#{INPUTDIR}/Book_#{SecureRandom.urlsafe_base64(5)}" << ".epub")
   end
 end
 
