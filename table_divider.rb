@@ -12,14 +12,24 @@ class TableDivider
     "<table>#{rows}</table>"
   end
 
+  def complex_table? html_fragment
+    html_fragment.to_s.include?('colspan') || html_fragment.to_s.include?('rowspan')
+  end
+
   def divide html_fragment
-    table_rows = html_fragment.css('tr')
-    if table_rows.count > @max_table_rows
-      table_rows.each_slice(@max_table_rows) do |rows_set|
-        @divided_tables << wrap_rows(rows_set.map{ |rows| rows.to_html }.join())
+
+    if complex_table? html_fragment
+      return nil
+    else
+      table_rows = html_fragment.css('tr')
+      if table_rows.count > @max_table_rows
+        table_rows.each_slice(@max_table_rows) do |rows_set|
+          @divided_tables << wrap_rows(rows_set.map{ |rows| rows.to_html }.join())
+        end
+        return @divided_tables
       end
-      @divided_tables
     end
+
   end
 
   def perform!
