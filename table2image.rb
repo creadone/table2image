@@ -122,7 +122,23 @@ def replace_tables_to_imgs page
   doc = parse_source page
   tables = doc.css('table')
 
+  images_with_wrong_path = tables.css('table img')
+
+
+#tmp/OEBPS/Images 
+
+  if images_with_wrong_path
+    images_with_wrong_path.each do |img|
+      basename = File.basename(img.attribute('src'))
+      path_from_root = `pwd`.strip
+      path_local = "tmp/OEBPS/Images/#{basename}"
+      img['src'] = File.join(path_from_root, path_local)
+      puts File.join(path_from_root, path_local)
+    end
+  end
+
   tables.each do |table|
+
 
     divided_tables = TableDivider.new(table).perform!
  
